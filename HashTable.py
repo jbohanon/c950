@@ -1,9 +1,14 @@
+import collections
 import math
+from abc import ABC
 
 from Package import Package
 
 
 class HashTable:
+    def __iter__(self):
+        return HTI(self)
+
     def __init__(self):
         self.array = [list()] * 50
         self.collision_safety = 10
@@ -53,3 +58,21 @@ class HashTable:
             for item in location:
                 p: Package = item
                 self.put(p.pkgid, p)
+
+
+class HTI:
+    def __init__(self, ht):
+        self._ht = ht
+        self._array_index = 0
+        self._list_index = 0
+
+    def __next__(self):
+        if self._array_index < (len(self._ht.array)):
+            if self._list_index < len(self._ht.array[self._array_index]):
+                result = self._ht.array[self._array_index][self._list_index]
+                self._list_index += 1
+                return result
+            else:
+                self._array_index += 1
+
+        raise StopIteration

@@ -2,12 +2,13 @@ from enum import Enum
 import Address
 
 
-class Package:
+class Status(Enum):
+    HUB = "At the Hub"
+    ENROUTE = "En route"
+    DELIVERED = "Delivered"
 
-    class Status(Enum):
-        HUB = "At the Hub"
-        ENROUTE = "En route"
-        DELIVERED = "Delivered"
+
+class Package:
 
     def with_status(self, status):
         return Package(self.pkgid, self.addr, self.deadline, self.weight, self.notes, status)
@@ -21,6 +22,6 @@ class Package:
         self.pairings = (list() if pairings is None else pairings)
         self.truck = truck
         self.status = status
-        self.manual_load = (True if (notes is not None or pairings is not None or truck != -1) else False)
+        self.manual_load = (True if (notes != '' or pairings != '' or truck != '') else False)
 
 
