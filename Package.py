@@ -11,7 +11,10 @@ class Status(Enum):
 class Package:
 
     def with_status(self, status):
-        return Package(self.pkgid, self.addr, self.deadline, self.weight, self.notes, status)
+        return Package(self.pkgid, self.addr, self.deadline, self.weight, self.notes, self.pairings, self.truck, status)
+
+    def with_address(self, addr):
+        return Package(self.pkgid, addr, self.deadline, self.weight, self.notes, self.pairings, self.truck, self.status)
 
     def __init__(self, pkgid, addr: Address.Address, deadline, weight, notes, pairings=None, truck=-1, status=Status.HUB):
         self.pkgid = pkgid

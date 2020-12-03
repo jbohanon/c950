@@ -5,6 +5,6 @@ distances = init_distance_data()
 locations = init_location_data()
 packages = init_pkg_data(locations)
 
-Truck.load_trucks(packages)
+Truck.load_trucks(packages, locations)
 
 print()
