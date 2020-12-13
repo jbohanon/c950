@@ -1,13 +1,9 @@
-import collections
 import math
-from abc import ABC
 
 from Package import Package
 
 
 class HashTable:
-    # def __iter__(self):
-    #     return HTI(self)
 
     def __init__(self):
         self.collision_safety = 10
@@ -27,7 +23,6 @@ class HashTable:
 
         for i in range(0, len(self.array[loc])):
             p: Package = self.array[loc][i]
-            # print(p)
             if p.pkgid == key:
                 self.array[loc][i] = value
                 break
@@ -36,7 +31,8 @@ class HashTable:
 
     def get(self, key):
         try:
-            for pkg in self.array[self._hash_mid_square(key)]:
+            list_loc: list = self.array[self._hash_mid_square(key)]
+            for pkg in list_loc:
                 if pkg.pkgid == key:
                     return pkg
         except ValueError as ve:
@@ -52,13 +48,8 @@ class HashTable:
         finally:
             return False
 
-    # def _hash_func_deprecated(self, key_seed):
-    #     try:
-    #         return ((math.e ** key_seed) % key_seed) % len(self.array)
-    #     except():
-    #         raise ValueError("key_seed not a number")
-
     def _hash_mid_square(self, key):
+        # Using Mid-Square hash function as taught in class material Figure 7.6.2
         try:
             squared_key = (key + 100) ** 2
 
@@ -79,21 +70,3 @@ class HashTable:
             for item in location:
                 p: Package = item
                 self.put(p.pkgid, p)
-
-
-# class HTI:
-#     def __init__(self, ht):
-#         self._ht = ht
-#         self._array_index = 0
-#         self._list_index = 0
-#
-#     def __next__(self):
-#         if self._array_index < (len(self._ht.array)):
-#             if self._list_index < len(self._ht.array[self._array_index]):
-#                 result = self._ht.array[self._array_index][self._list_index]
-#                 self._list_index += 1
-#                 return result
-#             else:
-#                 self._array_index += 1
-#
-#         raise StopIteration

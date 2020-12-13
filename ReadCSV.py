@@ -1,19 +1,26 @@
 import csv
-import os
 
 from typing import Dict
 
 from Address import Address
-from Package import Package
+from HashTable import HashTable
+from Package import Package, Priority
 
 
 def init_pkg_data(location_data: Dict[str, Address]):
-    pkg_list = {}
+    pkg_list = HashTable()
 
     with open('res/WGUPS_packages.csv') as csvfile:
         r = csv.reader(csvfile)
         for row in r:
-            pkg_list[int(row[0])] = Package(row[0], location_data.get(row[1]).with_city(row[2]), row[5], row[6], row[7], row[8], row[9])
+            if row[5] == "9:00 AM":
+                priority = Priority.HIGH
+            elif row[5] == "10:30 AM":
+                priority = Priority.MED
+            else:
+                priority = Priority.LOW
+
+            pkg_list.put(int(row[0]), Package(int(row[0]), location_data.get(row[1]).with_city(row[2]), priority, row[6], row[7], row[8], row[9]))
 
     return pkg_list
 
@@ -35,7 +42,7 @@ def init_distance_data():
 
     with open('res/WGUPS_distances.csv') as csvfile:
         r = csv.reader(csvfile)
-        locs = [None] * (num_locations + 1)
+        locs = ["" for i in range(num_locations + 1)]
         title_row = True
 
         for row in r:
