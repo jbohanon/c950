@@ -1,22 +1,44 @@
+import datetime
+
 from HashTable import HashTable
 from Package import Package
 
 
 class Stop:
-    def __init__(self, num, time):
+    def __init__(self, num, time, addr):
         self.num = num
         self.time = time
+        self.addr = addr
 
+    @staticmethod
+    def hub(time=datetime.time(8,0,0)):
+        return Stop(0, time, "4001 South 700 East")
 
 class Truck:
-
-    def __init__(self, truck_num, package_list=None, stops=None):
+    mph = 18
+    def __init__(self, truck_num, package_dict=None, stops=None):
         self.truck_num = truck_num
 
-        if package_list is None:
+        if package_dict is None:
             self.package_dict = {}
+        else:
+            self.package_dict = package_dict
         if stops is None:
             self.stops = []
+        else:
+            self.stops = stops
+
+    def sort_truck(self, distances: {}, origin_time=datetime.time(8, 0, 0)):
+        stops = self.stops
+        latest_stop = Stop.hub(origin_time)
+        pkgs = self.package_dict
+        for item in pkgs:
+            pkg: Package = item
+            dist = distances[latest_stop.addr][pkg.addr.addr]
+            for dest in distances[latest_stop.addr]:
+                pass
+
+        return Truck(self.truck_num, self.package_dict, stops)
 
     @staticmethod
     def load_trucks(packages: HashTable):

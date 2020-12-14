@@ -20,18 +20,27 @@ def init_pkg_data(location_data: Dict[str, Address]):
             else:
                 priority = Priority.LOW
 
-            pkg_list.put(int(row[0]), Package(int(row[0]), location_data.get(row[1]).with_city(row[2]), priority, row[6], row[7], row[8], row[9]))
+            pkg_list.put(int(row[0]),
+                         Package(int(row[0]), location_data.get(row[1]).with_city(row[2]), priority, row[6], row[7],
+                                 row[8], row[9]))
 
     return pkg_list
 
 
-def init_location_data():
+def init_location_data(distances: {}):
     locs = {}
 
     with open('res/WGUPS_locations.csv') as csvfile:
         r = csv.reader(csvfile)
         for row in r:
-            locs[row[1]] = Address(row[0], row[1], None, "UT", row[2])
+            row_dists = distances[row[1]]
+            list_tuples_dists = []
+            for key in row_dists:
+                tup = (key, row_dists[key])
+                list_tuples_dists.append(tup)
+                def sort_func(tupl): return tupl[1]
+                list_tuples_dists.sort(key=sort_func)
+            locs[row[1]] = Address(row[0], row[1], None, "UT", row[2], list_tuples_dists)
 
     return locs
 
