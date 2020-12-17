@@ -32,5 +32,3 @@ class Package:
         self.truck = truck
         self.status = status
         # self.manual_load = (True if (notes != '' or pairings != '' or truck != '') else False)
-
-
