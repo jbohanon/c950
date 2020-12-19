@@ -25,7 +25,7 @@ class HashTable:
             p: Package = self.array[loc][i]
             if p.pkgid == key:
                 self.array[loc][i] = value
-                break
+                return
 
         (self.array[loc]).append(value)
 
