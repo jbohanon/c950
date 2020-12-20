@@ -7,6 +7,7 @@ class Status(Enum):
     HUB = "At the Hub"
     ENROUTE = "En route"
     DELIVERED = "Delivered"
+    DELAYED = "Delayed"
 
 
 class Priority(Enum):
@@ -33,4 +34,4 @@ class Package:
         self.truck = truck
         self.status = status
         self.delivery_time: datetime.time = datetime.time(11, 59, 59)
-        # self.manual_load = (True if (notes != '' or pairings != '' or truck != '') else False)
+        self.truck_assignment = 0

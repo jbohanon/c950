@@ -7,3 +7,4 @@ class DataCache:
         self.distances = init_distance_data()
         self.locations = init_location_data(self.distances)
         self.packages = init_pkg_data(self.locations)
+        self.trucks = {}

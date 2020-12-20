@@ -8,8 +8,9 @@ class HashTable:
     def __init__(self):
         self.collision_safety = 10
         self.array = [[] for i in range(100)]
+        self.length = 0
 
-    def put(self, key, value):
+    def put(self, key, value, is_resize=False):
 
         if key <= 0:
             raise ValueError
@@ -28,6 +29,8 @@ class HashTable:
                 return
 
         (self.array[loc]).append(value)
+        if not is_resize:
+            self.length += 1
 
     def get(self, key):
         try:
@@ -69,4 +72,7 @@ class HashTable:
         for location in tmp_arr:
             for item in location:
                 p: Package = item
-                self.put(p.pkgid, p)
+                self.put(p.pkgid, p, True)
+
+    def len(self):
+        return self.length
