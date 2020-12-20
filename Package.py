@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum
 import Address
 
@@ -31,4 +32,5 @@ class Package:
         self.pairings = (list() if pairings is None else pairings)
         self.truck = truck
         self.status = status
+        self.delivery_time: datetime.time = datetime.time(11, 59, 59)
         # self.manual_load = (True if (notes != '' or pairings != '' or truck != '') else False)

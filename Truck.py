@@ -25,9 +25,14 @@ class Truck:
             self.package_addr_list = package_addr_list
 
         if stops is None:
-            self.stops = []
+            self.stops = {}
         else:
             self.stops = stops
+
+    def print(self):
+        for i in self.package_dict:
+            pkg: Package = self.package_dict[i]
+            print(pkg.pkgid, pkg.addr.addr, pkg.delivery_time)
 
     def with_address_list(self):
         # Copy of truck's package dict for local use
@@ -44,31 +49,22 @@ class Truck:
         return Truck(self.truck_num, self.dc, self.package_dict, addr_list)
 
     # Sort truck algorithm, taking dictionary of distance dictionaries for each address and truck depart time
-    def sort_truck(self, distances: {}, origin_time=datetime.time(8, 0, 0)):
-        # Copy of stops list for local use
-        stops = self.stops
-
+    def sort_truck(self, origin_time=datetime.time(8, 0, 0)):
         # Declare hub as origin of route
-        latest_stop = Stop.hub(self.dc, origin_time)
+        hub = Stop.hub(self.dc, origin_time)
 
-        next_addr = latest_stop.greedy_3(self.package_addr_list)
-        print()
+        # next_addr = hub.greedy_3(self.package_addr_list)
+        stops = hub.greedy_stop_algorithm(self.package_addr_list)
+        last_stop: Stop = stops[len(stops[0])]
+        stops[len(stops[0]) + 1] = Stop.hub(self.dc, Stop.add_time(last_stop.time, self.dc.distances[last_stop.addr.addr][hub.addr.addr]))
+        for i in self.package_dict:
+            # pkg: Package = item
+            for stop in stops[0]:
+                if stops[0][stop].addr.addr == self.package_dict[i].addr.addr:
+                    pkg: Package = self.package_dict[i]
+                    pkg.delivery_time = stops[0][stop].time
 
-        return Truck(self.truck_num, self.package_dict, self.package_dict, self.package_addr_list, stops)
-
-    @classmethod
-    def greedy_3(cls, last_stop, truck_pkgs, depth=0):
-        stop_addr = last_stop.addr.addr
-
-
-    @staticmethod
-    def intersect_dist_tuples(truck_package_list: {}, addr_distances_list: [()]):
-        truck_distances_list = []
-        for i in truck_package_list:
-            truck_distances_list.append((i, truck_package_list[i]))
-
-        return set(addr_distances_list).intersection(set(truck_distances_list))
-
+        return Truck(self.truck_num, self.package_dict, self.package_dict, self.package_addr_list, stops[0]), stops[1]
 
     @staticmethod
     def load_trucks(dc: DataCache):
