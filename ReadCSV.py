@@ -30,9 +30,11 @@ def init_location_data(distances: {}):
 
     with open('res/WGUPS_locations.csv') as csvfile:
         r = csv.reader(csvfile)
+        # n rows
         for row in r:
             row_dists = distances[row[1]]
             list_tuples_dists = []
+            # n keys
             for key in row_dists:
                 tup = (key, row_dists[key])
                 list_tuples_dists.append(tup)

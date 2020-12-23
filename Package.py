@@ -47,12 +47,19 @@ class Package:
             self.status = Status.HUB
 
         if self.status == Status.DELIVERED:
-            print(str(self.pkgid).ljust(3) + "| " + str(
-                self.status.value + " at " + self.delivery_time.strftime("%X")).ljust(23) + "| " + str(
-                self.addr.addr).ljust(48) + "| " + str(self.priority.value).ljust(9) + "| " + str(self.weight).ljust(
-                12) + "| " + self.notes)
+            print(
+                str(self.pkgid).ljust(3) + "| "
+                + str(self.status.value + " at " + self.delivery_time.strftime("%X")
+                      + " on truck " + str(self.truck_assignment)).ljust(34) + "| "
+                + str(self.addr.addr).ljust(40) + "| "
+                + str(self.priority.value).ljust(9) + "| "
+                + str(self.weight).ljust(12) + "| "
+                + self.notes)
         else:
             print(
-                str(self.pkgid).ljust(3) + "| " + str(self.status.value).ljust(23) + "| " + str(self.addr.addr).ljust(
-                    48) + "| " + str(self.priority.value).ljust(9) + "| " + str(self.weight).ljust(
-                    12) + "| " + self.notes)
+                str(self.pkgid).ljust(3) + "| "
+                + str(self.status.value).ljust(34) + "| "
+                + str(self.addr.addr).ljust(40) + "| "
+                + str(self.priority.value).ljust(9) + "| "
+                + str(self.weight).ljust(12) + "| "
+                + self.notes)

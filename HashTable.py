@@ -9,9 +9,9 @@ class HashTable:
         self.array = [[] for i in range(100)]
         self.length = 0
 
-    def put(self, key, value, is_resize=False):
+    def put(self, key: int, value, is_resize=False):
 
-        if key <= 0:
+        if key <= 0 or value is not Package:
             raise ValueError
         try:
             # _hash_mid_square is O(1)
@@ -80,9 +80,13 @@ class HashTable:
         except():
             raise ValueError("key not a number")
 
+    # resize copies the existing elements into a temporary list, then creates a new list for
+    # self.array that is twice the previous size. It then iterates through the list of buckets
+    # and iterates through the list at each bucket calling self.put on each element
+    # to place it in the new array.
+    #
     # resize runs in O(n) average with the assumption that the hash function above
     # distributes packages reasonably evenly
-    # Worst case would be
     def resize(self):
         tmp_arr = self.array
         self.array = [[] for i in range(len(tmp_arr) * 2)]

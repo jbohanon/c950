@@ -13,7 +13,7 @@ class DataCache:
     def print_all_packages(self, check_time: datetime.time):
 
         # print_all_packages runs in O(n) for space and time.
-        print("ID".ljust(2), "| Status".ljust(24), "| Address".ljust(49), "| Deadline".ljust(9),
+        print("ID".ljust(2), "| Status".ljust(35), "| Address".ljust(41), "| Deadline".ljust(9),
               "| Weight (lb)".ljust(12), "| Notes")
         for i in range(1, self.packages.len() + 1):
             import Package
