@@ -1,14 +1,11 @@
 import datetime
 
 from DataCache import DataCache
-from HashTable import HashTable
 from Package import Package
 from Stop import Stop
 
 
 class Truck:
-
-    mph = 18
 
     def __init__(self, truck_num, dc: DataCache, package_dict=None, package_addr_list=None, stops=None, end_time=datetime.time(11, 59), start_time=datetime.time(8)):
         self.dc: DataCache = dc
@@ -32,18 +29,12 @@ class Truck:
         self.end_time = end_time
         self.start_time = start_time
 
-    def print(self):
-        for i in self.package_dict:
-            pkg: Package = self.package_dict[i]
-            print(pkg.pkgid, pkg.addr.addr, pkg.delivery_time)
-
     def with_address_list(self):
-        # Copy of truck's package dict for local use
         pkgs = self.package_dict
 
         addr_list = []
 
-        # Create list of addresses (strings) on truck
+        # Create list of addresses on truck as strings
         for i in pkgs:
             pkg: Package = pkgs[i]
             pkg.truck_assignment = self.truck_num
@@ -52,23 +43,25 @@ class Truck:
 
         return Truck(self.truck_num, self.dc, self.package_dict, addr_list)
 
-    # Sort truck algorithm, taking dictionary of distance dictionaries for each address and truck depart time
     def sort_truck(self, origin_time=datetime.time(8, 0, 0)):
         # Declare hub as origin of route
         hub = Stop.hub(self.dc, origin_time)
 
-        stops = hub.greedy_stop_algorithm(self.package_addr_list)
-        stop_dict = stops[0]
+        # core_routing_algorithm O(n)
+        stop_dict, route_distance = hub.core_routing_algorithm(self.package_addr_list)
+
         last_stop: Stop = stop_dict[len(stop_dict) - 1]
+
+        # Add hub as last stop of route
         stop_dict[len(stop_dict)] = Stop.hub(self.dc, Stop.add_time(last_stop.time, self.dc.distances[last_stop.addr.addr][hub.addr.addr]))
         for i in self.package_dict:
-            for stop in stops[0]:
-                if stops[0][stop].addr.addr == self.package_dict[i].addr.addr:
+            for stop in stop_dict:
+                if stop_dict[stop].addr.addr == self.package_dict[i].addr.addr:
                     pkg: Package = self.package_dict[i]
-                    pkg.delivery_time = stops[0][stop].time
-        end_time = stops[0][len(stops[0]) - 1].time
+                    pkg.delivery_time = stop_dict[stop].time
+        end_time = stop_dict[len(stop_dict) - 1].time
 
-        return Truck(self.truck_num, self.package_dict, self.package_dict, self.package_addr_list, stops[0], end_time, origin_time), stops[1]
+        return Truck(self.truck_num, self.package_dict, self.package_dict, self.package_addr_list, stop_dict, end_time, origin_time), route_distance
 
     @staticmethod
     def load_trucks(dc: DataCache):

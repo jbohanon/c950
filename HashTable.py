@@ -1,5 +1,4 @@
 import math
-
 from Package import Package
 
 
@@ -15,13 +14,19 @@ class HashTable:
         if key <= 0:
             raise ValueError
         try:
+            # _hash_mid_square is O(1)
             loc = math.floor(self._hash_mid_square(key))
             if len(self.array[loc]) + 1 > self.collision_safety:
+                # self.resize is O(n) average.
+                # If resizes chain off of each other, time complexity gets much worse
+                # This is not likely with doubling the size of the table and the hash
+                # function self-adjusting as n increases.
                 self.resize()
                 loc = int(self._hash_mid_square(key))
         except ValueError as ve:
             raise ve
 
+        # Collision safety = 10 so this is O(1)
         for i in range(0, len(self.array[loc])):
             p: Package = self.array[loc][i]
             if p.pkgid == key:
@@ -51,21 +56,33 @@ class HashTable:
         finally:
             return False
 
+    # All operations in _hash_mid_square are constant time, therefore the method is as well.
     def _hash_mid_square(self, key):
         # Using Mid-Square hash function as taught in class material Figure 7.6.2
         try:
+            # self-adjust to make number of bits more appropriate as n increases
+            # in order to improve collision rate
+            num_bits = 20
+            hex_representation = 0xFFFFF
+            if self.length < 1000:
+                num_bits = 32
+                hex_representation = 0xFFFFFFFF
+
             squared_key = (key + 100) ** 2
 
             bits = math.ceil(math.log(len(self.array), 2))
 
-            low_bits_to_remove = (32 - bits) // 2
+            low_bits_to_remove = (num_bits - bits) // 2
             extracted_bits = squared_key >> low_bits_to_remove
-            extracted_bits = extracted_bits & (0xFFFFFFFF >> (32 - bits))
+            extracted_bits = extracted_bits & (hex_representation >> (num_bits - bits))
 
             return extracted_bits % len(self.array)
         except():
             raise ValueError("key not a number")
 
+    # resize runs in O(n) average with the assumption that the hash function above
+    # distributes packages reasonably evenly
+    # Worst case would be
     def resize(self):
         tmp_arr = self.array
         self.array = [[] for i in range(len(tmp_arr) * 2)]

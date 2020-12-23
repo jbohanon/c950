@@ -10,7 +10,6 @@ from Truck import Truck
 dc = DataCache()
 
 dc.trucks[1], dc.trucks[2], dc.trucks[3], dc.trucks[4] = Truck.load_trucks(dc)
-# tr_1, tr_2, tr_3, tr_4 = Truck.load_trucks(dc)
 
 dc.trucks[1], tr_1_miles = dc.trucks[1].sort_truck()
 dc.trucks[2], tr_2_miles = dc.trucks[2].sort_truck()
@@ -19,11 +18,10 @@ dc.trucks[4], tr_4_miles = dc.trucks[4].sort_truck(max(max(dc.trucks[1].end_time
 
 miles = tr_1_miles + tr_2_miles + tr_3_miles + tr_4_miles
 
+print("Routing complete; total distance traveled: " + str(int(miles)) + " miles")
+for i in range(1, 5):
+    print("Truck " + str(i) + ":")
+    for n in range(len(dc.trucks[i].stops)):
+        print(dc.trucks[i].stops[n].num, dc.trucks[i].stops[n].time, dc.trucks[i].stops[n].addr.addr)
+
 UI.core_loop(dc)
-
-# tr_1.print()
-# tr_2.print()
-# tr_3.print()
-# tr_4.print()
-
-# print(miles)

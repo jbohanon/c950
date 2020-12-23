@@ -1,7 +1,5 @@
 import csv
-
 from typing import Dict
-
 from Address import Address
 from HashTable import HashTable
 from Package import Package, Priority
@@ -39,6 +37,7 @@ def init_location_data(distances: {}):
                 tup = (key, row_dists[key])
                 list_tuples_dists.append(tup)
                 def sort_func(tupl): return tupl[1]
+                # Python's list.sort() runs in O(n log n)
                 list_tuples_dists.sort(key=sort_func)
             locs[row[1]] = Address(row[0], row[1], None, "UT", row[2], list_tuples_dists)
 
