@@ -9,9 +9,9 @@ class HashTable:
         self.array = [[] for i in range(100)]
         self.length = 0
 
-    def put(self, key: int, value, is_resize=False):
+    def put(self, key: int, value: Package, is_resize=False):
 
-        if key <= 0 or value is not Package:
+        if key <= 0:
             raise ValueError
         try:
             # _hash_mid_square is O(1)
