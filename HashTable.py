@@ -59,6 +59,7 @@ class HashTable:
     # All operations in _hash_mid_square are constant time, therefore the method is as well.
     def _hash_mid_square(self, key):
         # Using Mid-Square hash function as taught in class material Figure 7.6.2
+        # (Lysecky, R., & Vahid, F., 2018)
         try:
             # self-adjust to make number of bits more appropriate as n increases
             # in order to improve collision rate
